@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+
+  influxdb:
+    build: ./influxdb
+    ports:
+      - 8086:8086 # HTTP API
+      - 8083:8083 # Admin Port
+      - 2003:2003 # Statsd Port
+
+  node:
+    build: ./node
+    volumes:
+      - ./node/src:/usr/src/app/src
+      - ./node/test:/usr/src/app/test
+    depends_on:
+      - influxdb
+
+  #db:
+    #build: ./db
+    #volumes:
+      #- ./dist/mysql:/var/lib/mysql
+    #ports:
+      #- 3306
+
+  #app:
+    #build: ./app
+    #volumes:
+      #- ./app:/usr/src/app
+    #ports:
+      #- 3000:3000
+    #depends_on:
+      #- db
+  #web:
+    #build: ./web
+    #ports:
+      #- 80:80
+      #- 443:443
+    #depends_on:
+      #- app
+  #api:
+    #build: .
+    #ports:
+      #- "8080:8080"
+    #volumes:
+      #- ./build.gradle:/usr/src/app/build.gradle
+      #- ./src/:/usr/src/app/src:ro
+    #depends_on:
+      #- db
+
+
